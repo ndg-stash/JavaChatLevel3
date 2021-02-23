@@ -42,4 +42,19 @@ public class SQLHandler {
         }
         return null;
     }
+
+    public static String changeNickName(String oldName, String newName){
+        try {
+            PreparedStatement ps = connection.prepareStatement("update users set nickname = ? where nickname = ?");
+            ps.setString (1, newName);
+            ps.setString (2, oldName);
+            ps.executeUpdate();
+            ps.close();
+            return "OK";
+        } catch (SQLException e) {
+            return e.getMessage();
+            //e.printStackTrace();
+        }
+    }
+
 }

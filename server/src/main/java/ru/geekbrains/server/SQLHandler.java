@@ -26,7 +26,14 @@ public class SQLHandler {
 
     public static String getNickByLoginAndPassword(String login, String password) {
         try {
-            ResultSet rs = statement.executeQuery("SELECT nickname FROM users WHERE login ='" + login + "' AND password = '" + password + "'");
+            PreparedStatement ps = connection.prepareStatement("select nickname from users where login = ? and password = ?");
+            ps.setString (1, login);
+            ps.setString (2, password);
+            ResultSet rs = ps.executeQuery();
+            //System.out.println(rs.next());
+            //System.out.println(rs.getString("nickname"));
+            //ResultSet rs = statement.executeQuery("SELECT nickname FROM users WHERE login ='" + login + "' AND password = '" + password + "'");
+
             if (rs.next()) {
                 return rs.getString("nickname");
             }
@@ -35,4 +42,19 @@ public class SQLHandler {
         }
         return null;
     }
+
+    public static String changeNickName(String oldName, String newName){
+        try {
+            PreparedStatement ps = connection.prepareStatement("update users set nickname = ? where nickname = ?");
+            ps.setString (1, newName);
+            ps.setString (2, oldName);
+            ps.executeUpdate();
+            ps.close();
+            return "OK";
+        } catch (SQLException e) {
+            return e.getMessage();
+            //e.printStackTrace();
+        }
+    }
+
 }

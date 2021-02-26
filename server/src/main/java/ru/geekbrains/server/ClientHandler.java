@@ -38,6 +38,20 @@ public class ClientHandler {
                     while (true) {
                         String str = in.readUTF();
                         System.out.println("Сообщение от клиента: " + str);
+
+                        if (str.length()>6 && str.startsWith("/name")){
+                            String newNickName = str.substring(6).trim();
+                            if (newNickName.length()>0){
+                                String changeResult = SQLHandler.changeNickName(nickname, newNickName);
+                                if (changeResult.equals("OK")){
+                                    server.broadcastMsg("user#"+nickname+ " установил имя: "+newNickName);
+                                    nickname = newNickName;
+                                } else
+                                    System.out.println(changeResult);
+                                continue;
+                            }
+                        }
+
                         if (str.equals("/end")) {
                             break;
                         }

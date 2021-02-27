@@ -38,7 +38,9 @@ public class StoryManager {
                 }
             }
 
-            fileReader.close();
+            if (fileReader != null){
+                fileReader.close();
+            }
 
         } catch (IOException ex) {
             System.out.println(ex.getMessage());

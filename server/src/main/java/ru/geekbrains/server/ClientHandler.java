@@ -30,6 +30,9 @@ public class ClientHandler {
                                 sendMsg("/authok");
                                 server.subscribe(this);
                                 nickname = nickFromDB;
+
+                                //покажем историю чата
+                                sendMsg(StoryManager.readStory());
                                 break;
                             }
                         }

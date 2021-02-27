@@ -38,8 +38,10 @@ public class Server {
 
     public void broadcastMsg(String msg) {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        String fullMsg = sdf.format(timestamp) + msg;
         for (ClientHandler c : clients) {
-            c.sendMsg(sdf.format(timestamp) + msg);
+            c.sendMsg(fullMsg);
         }
+        StoryManager.saveStory(fullMsg);
     }
 }

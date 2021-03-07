@@ -3,10 +3,13 @@ package ru.geekbrains.server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Vector;
 
 public class Server {
     private Vector<ClientHandler> clients;
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("(yyyy.MM.dd HH:mm:ss)   ");
 
     public Server() {
         try {
@@ -34,8 +37,11 @@ public class Server {
     }
 
     public void broadcastMsg(String msg) {
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        String fullMsg = sdf.format(timestamp) + msg;
         for (ClientHandler c : clients) {
-            c.sendMsg(msg);
+            c.sendMsg(fullMsg);
         }
+        StoryManager.saveStory(fullMsg);
     }
 }

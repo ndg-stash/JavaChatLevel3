@@ -1,5 +1,8 @@
 package ru.geekbrains.server;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.Logger;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -37,11 +40,15 @@ public class Server {
     }
 
     public void broadcastMsg(String msg) {
+
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         String fullMsg = sdf.format(timestamp) + msg;
         for (ClientHandler c : clients) {
             c.sendMsg(fullMsg);
         }
         StoryManager.saveStory(fullMsg);
+
+        Logger log = LogManager
+        log.log(info);
     }
 }

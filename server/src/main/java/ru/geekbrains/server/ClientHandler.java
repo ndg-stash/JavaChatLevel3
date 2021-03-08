@@ -50,7 +50,6 @@ public class ClientHandler {
 
                     while (true) {
                         String str = in.readUTF();
-                        String contextStr = null;
                         //System.out.println("Сообщение от клиента: " + str);
                         //System.out.println(ThreadContext.getContext());
 

@@ -1,11 +1,18 @@
 package ru.geekbrains.server;
 
+import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.ThreadContext;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
+@Log4j2
 public class ClientHandler {
+    private static final Logger eventsLog = LogManager.getLogger("eventsLog");
     private Server server;
     private Socket socket;
     private DataInputStream in;
@@ -31,16 +38,21 @@ public class ClientHandler {
                                 server.subscribe(this);
                                 nickname = nickFromDB;
 
+                                ThreadContext.put("user", nickname);
                                 //покажем историю чата
                                 sendMsg(StoryManager.readStory());
                                 break;
+                            }else {
+                                eventsLog.warn(subStrings[1]+" Ошибка авторизации");
                             }
                         }
                     }
 
                     while (true) {
                         String str = in.readUTF();
-                        System.out.println("Сообщение от клиента: " + str);
+                        String contextStr = null;
+                        //System.out.println("Сообщение от клиента: " + str);
+                        //System.out.println(ThreadContext.getContext());
 
                         if (str.length()>6 && str.startsWith("/name")){
                             String newNickName = str.substring(6).trim();
@@ -50,7 +62,7 @@ public class ClientHandler {
                                     server.broadcastMsg("user#"+nickname+ " установил имя: "+newNickName);
                                     nickname = newNickName;
                                 } else
-                                    System.out.println(changeResult);
+                                    log.warn(changeResult);
                                 continue;
                             }
                         }
@@ -58,6 +70,7 @@ public class ClientHandler {
                         if (str.equals("/end")) {
                             break;
                         }
+                        log.info(str);
                         server.broadcastMsg(nickname + ": " + str);
                     }
                 } catch (IOException e) {

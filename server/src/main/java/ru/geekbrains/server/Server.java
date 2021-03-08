@@ -1,14 +1,12 @@
 package ru.geekbrains.server;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.core.Logger;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Vector;
+
 
 public class Server {
     private Vector<ClientHandler> clients;
@@ -47,8 +45,5 @@ public class Server {
             c.sendMsg(fullMsg);
         }
         StoryManager.saveStory(fullMsg);
-
-        Logger log = LogManager
-        log.log(info);
     }
 }
